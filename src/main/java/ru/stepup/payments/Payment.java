@@ -7,11 +7,11 @@ public class Payment {
 
     private PaymentStatus status;
 
-    public Payment(String cardNumber, double amount){
-        if (cardNumber == null || !cardNumber.matches("\\d{16}")){
+    public Payment(String cardNumber, double amount) {
+        if (cardNumber == null || !cardNumber.matches("\\d{16}")) {
             throw new IllegalArgumentException("Номер карты должен состоять из 16 цифр");
         }
-        if (amount <=0) {
+        if (amount <= 0) {
             throw new IllegalArgumentException("Сумма платежа должна быть больше нуля");
         }
         this.cardNumber = cardNumber;
@@ -19,16 +19,16 @@ public class Payment {
         this.status = PaymentStatus.CREATED;
     }
 
-    public void markAsSuccess(){
-        if(status !=PaymentStatus.CREATED) {
-            throw new IllegalArgumentException("Можно завершить только платёж в статусе CREATED");
+    public void markAsSuccess() {
+        if (status != PaymentStatus.CREATED) {
+            throw new IllegalStateException("Нельзя отметить успешным платёж в статусе " + status);
         }
         this.status = PaymentStatus.SUCCESS;
     }
 
-    public void markAsFailed(){
-        if(status !=PaymentStatus.CREATED) {
-            throw new IllegalArgumentException("Можно завершить только платёж в статусе CREATED");
+    public void markAsFailed() {
+        if (status != PaymentStatus.CREATED) {
+            throw new IllegalStateException("Нельзя отметить проваленным платёж в статусе " + status);
         }
         this.status = PaymentStatus.FAILED;
     }

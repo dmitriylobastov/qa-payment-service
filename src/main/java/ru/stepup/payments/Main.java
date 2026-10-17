@@ -6,7 +6,7 @@ public class Main {
 
         System.out.println(PaymentStatus.valueOf("SUCCESS").getDescription());
 
-        for (PaymentStatus s: PaymentStatus.values()){
+        for (PaymentStatus s : PaymentStatus.values()) {
             System.out.println(s);
         }
 
