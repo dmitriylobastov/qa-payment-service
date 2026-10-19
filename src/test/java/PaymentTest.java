@@ -1,6 +1,7 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.stepup.payments.Payment;
+import ru.stepup.payments.PaymentCard;
 import ru.stepup.payments.PaymentStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -69,7 +70,7 @@ public class PaymentTest {
     }
 
     @Test
-    void shouldThrowWhenMarkAsSuccessAfterSuccess(){
+    void shouldThrowWhenMarkAsSuccessAfterSuccess() {
         payment.markAsSuccess();
         assertThatThrownBy(() -> payment.markAsSuccess())
                 .isInstanceOf(IllegalStateException.class);
