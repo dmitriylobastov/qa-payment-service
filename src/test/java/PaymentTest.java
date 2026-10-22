@@ -91,4 +91,17 @@ public class PaymentTest {
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("SUCCESS");
     }
+
+    @Test
+    void shouldReturnTypePaymentCard() {
+        PaymentCard card = new PaymentCard("IVAN", "1234567812345678");
+        assertThat(card.getType()).isEqualTo("PaymentCard");
+    }
+
+    @Test
+    void shouldThrowWhenCreateCardWithInvalidNumber() {
+        assertThatThrownBy(() -> new PaymentCard("IVAN", "123"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Номер карты должен состоять из 16 цифр");
+    }
 }
