@@ -1,3 +1,5 @@
+package ru.stepup.payments;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.stepup.payments.Payment;
