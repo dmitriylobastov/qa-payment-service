@@ -10,7 +10,5 @@ public class Main {
         for (PaymentStatus s : PaymentStatus.values()) {
             System.out.println(s);
         }
-
-
     }
 }
