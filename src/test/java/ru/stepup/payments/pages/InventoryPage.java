@@ -19,11 +19,11 @@ public class InventoryPage extends BasePage {
         return driver.findElements(inventoryItems).size();
     }
 
-    public void addFirstProductToCart (){
-        driver.findElements(addToCart).get(0).click();
+    public void addProductToCart() {
+        click(addToCart);
     }
 
-    public void goToCart(){
-        driver.findElement(cart).click();
+    public void goToCart() {
+        click(cart);
     }
 }

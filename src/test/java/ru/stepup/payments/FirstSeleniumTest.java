@@ -5,13 +5,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import ru.stepup.payments.pages.CartPage;
+import ru.stepup.payments.pages.CheckoutPage;
 import ru.stepup.payments.pages.InventoryPage;
 import ru.stepup.payments.pages.LoginPage;
-
-import java.time.Duration;
 
 import static ru.stepup.payments.data.TestData.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -40,8 +37,8 @@ public class FirstSeleniumTest {
     void shouldLoginSuccessfully() {
         driver.get("https://www.saucedemo.com/");
         new LoginPage(driver).login(STANDARD_USER, SECRET_SAUCE);
-        new WebDriverWait(driver, Duration.ofSeconds(5))
-                .until(ExpectedConditions.urlContains("inventory"));
+        InventoryPage inventoryPage = new InventoryPage(driver);
+        inventoryPage.waitForUrlContains("inventory");
         assertThat(driver.getCurrentUrl()).contains("inventory");
     }
 
@@ -49,9 +46,8 @@ public class FirstSeleniumTest {
     void shouldShowProductsAfterLogin() {
         driver.get("https://www.saucedemo.com");
         new LoginPage(driver).login(STANDARD_USER, SECRET_SAUCE);
-        new WebDriverWait(driver, Duration.ofSeconds(5))
-                .until(ExpectedConditions.urlContains("inventory"));
         InventoryPage inventoryPage = new InventoryPage(driver);
+        inventoryPage.waitForUrlContains("inventory");
         assertThat(inventoryPage.getProductCount()).isEqualTo(6);
     }
 
@@ -59,14 +55,34 @@ public class FirstSeleniumTest {
     void shouldAddProductToCart() {
         driver.get("https://www.saucedemo.com");
         new LoginPage(driver).login(STANDARD_USER, SECRET_SAUCE);
-        new WebDriverWait(driver, Duration.ofSeconds(5))
-                .until(ExpectedConditions.urlContains("inventory"));
         InventoryPage inventoryPage = new InventoryPage(driver);
-        inventoryPage.addFirstProductToCart();
+        inventoryPage.waitForUrlContains("inventory");
+        inventoryPage.addProductToCart();
         inventoryPage.goToCart();
         CartPage cartPage = new CartPage(driver);
-        new WebDriverWait(driver, Duration.ofSeconds(5))
-                .until(ExpectedConditions.urlContains("cart"));
+        cartPage.waitForUrlContains("cart");
         assertThat(cartPage.getCartItemCount()).isEqualTo(1);
     }
+
+    @Test
+    void shouldCheckout() {
+        driver.get("https://www.saucedemo.com");
+        new LoginPage(driver).login(STANDARD_USER, SECRET_SAUCE);
+        InventoryPage inventoryPage = new InventoryPage(driver);
+        inventoryPage.waitForUrlContains("inventory");
+        inventoryPage.addProductToCart();
+        inventoryPage.goToCart();
+        CartPage cartPage = new CartPage(driver);
+        cartPage.waitForUrlContains("cart");
+        CheckoutPage checkoutPage = new CheckoutPage(driver);
+        checkoutPage.goToCheckout();
+        checkoutPage.waitForUrlContains("checkout-step-one");
+        checkoutPage.fillInfo("Ivan", "Ivanov", "123456");
+        checkoutPage.clickContinue();
+        checkoutPage.waitForUrlContains("checkout-step-two");
+        assertThat(driver.getCurrentUrl()).contains("checkout-step-two");
+
+    }
+
+
 }
