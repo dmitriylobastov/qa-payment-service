@@ -3,28 +3,22 @@ package ru.stepup.payments.pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-public class LoginPage {
+public class LoginPage extends BasePage {
 
-    private final WebDriver driver;
+    private final By usernameField = By.id("user-name");
+    private final By passwordField = By.id("password");
+    private final By loginButton = By.id("login-button");
 
-    private By usernameField = By.id("user-name");
-    private By passwordField = By.id("password");
-    private By loginButton = By.id("login-button");
-
-    public LoginPage (WebDriver driver) {
-        if (driver == null) {
-            throw new IllegalArgumentException("Объект драйвера пустой");
-        }
-        this.driver = driver;
+    public LoginPage(WebDriver driver) {
+        super(driver);
     }
 
-    public void login(String user, String pass){
+    public void login(String user, String pass) {
         driver.findElement(usernameField)
                 .sendKeys(user);
         driver.findElement(passwordField)
                 .sendKeys(pass);
         driver.findElement(loginButton)
                 .click();
-
     }
 }
