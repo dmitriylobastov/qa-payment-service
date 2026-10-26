@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import ru.stepup.payments.pages.InventoryPage;
 import ru.stepup.payments.pages.LoginPage;
 
 import java.time.Duration;
@@ -42,4 +43,15 @@ public class FirstSeleniumTest {
                 .until(ExpectedConditions.urlContains("inventory"));
         assertThat(driver.getCurrentUrl()).contains("inventory");
     }
+
+    @Test
+    void shouldShowProductsAfterLogin() {
+        driver.get("https://www.saucedemo.com");
+        new LoginPage(driver).login(STANDARD_USER, SECRET_SAUCE);
+        new WebDriverWait(driver, Duration.ofSeconds(5))
+                .until(ExpectedConditions.urlContains("inventory"));
+        InventoryPage inventoryPage = new InventoryPage(driver);
+        assertThat(inventoryPage.getProductCount()).isEqualTo(6);
+    }
+
 }
