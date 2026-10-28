@@ -2,10 +2,16 @@ package ru.stepup.payments.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
+import java.util.List;
 
 public class InventoryPage extends BasePage {
 
-    private final By inventoryItems = By.cssSelector(".inventory_item");
+    @FindBy (css = ".inventory_item")
+    private List<WebElement> inventoryItems;
 
     private final By addToCart = By.cssSelector(".btn_inventory");
 
@@ -13,10 +19,11 @@ public class InventoryPage extends BasePage {
 
     public InventoryPage(WebDriver driver) {
         super(driver);
+        PageFactory.initElements(driver, this);
     }
 
     public int getProductCount() {
-        return driver.findElements(inventoryItems).size();
+        return inventoryItems.size();
     }
 
     public void addProductToCart() {
