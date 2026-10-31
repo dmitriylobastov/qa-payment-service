@@ -6,6 +6,9 @@ out/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+allure-results/
+allure-report/
+.allure/
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

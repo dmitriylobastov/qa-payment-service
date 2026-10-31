@@ -1,6 +1,6 @@
 package ru.stepup.payments.pages;
 
-import org.openqa.selenium.By;
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -20,6 +20,7 @@ public class LoginPage extends BasePage {
         PageFactory.initElements(driver, this);
     }
 
+    @Step("Логип пользователем {user}")
     public void login(String user, String pass) {
         sendKeys(usernameField, user);
         sendKeys(passwordField, pass);
