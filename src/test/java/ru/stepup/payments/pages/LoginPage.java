@@ -17,12 +17,12 @@ public class LoginPage extends BasePage {
 
     public LoginPage(WebDriver driver) {
         super(driver);
-        PageFactory.initElements(driver,this);
+        PageFactory.initElements(driver, this);
     }
 
     public void login(String user, String pass) {
-        usernameField.sendKeys(user);
-        passwordField.sendKeys(pass);
-        loginButton.click();
+        sendKeys(usernameField, user);
+        sendKeys(passwordField, pass);
+        click(loginButton);
     }
 }

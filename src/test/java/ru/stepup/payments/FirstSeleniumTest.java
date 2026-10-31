@@ -3,6 +3,7 @@ package ru.stepup.payments;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import ru.stepup.payments.pages.CartPage;
@@ -24,6 +25,9 @@ public class FirstSeleniumTest {
 
     @AfterEach
     void tearDown() {
+        driver.manage().deleteAllCookies();
+        driver.get("https://www.saucedemo.com/");
+        ((JavascriptExecutor) driver).executeScript("window.localStorage.clear();");
         driver.quit();
     }
 
@@ -74,6 +78,7 @@ public class FirstSeleniumTest {
         inventoryPage.goToCart();
         CartPage cartPage = new CartPage(driver);
         cartPage.waitForUrlContains("cart");
+        assertThat(cartPage.getCartItemCount()).isEqualTo(1);
         CheckoutPage checkoutPage = new CheckoutPage(driver);
         checkoutPage.goToCheckout();
         checkoutPage.waitForUrlContains("checkout-step-one");
@@ -81,8 +86,5 @@ public class FirstSeleniumTest {
         checkoutPage.clickContinue();
         checkoutPage.waitForUrlContains("checkout-step-two");
         assertThat(driver.getCurrentUrl()).contains("checkout-step-two");
-
     }
-
-
 }
