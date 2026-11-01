@@ -4,9 +4,9 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
+import static io.restassured.module.jsv.JsonSchemaValidator.*;
 
 public class ApiTest {
 
@@ -47,5 +47,15 @@ public class ApiTest {
         assertThat(id).isEqualTo(101);
         assertThat(response.header("Content-Type")).contains("application/json");
         assertThat(response.path("title").toString()).isEqualTo("Мой новый пост");
+    }
+
+    @Test
+    void shouldValidateUserSchema() {
+        given()
+                .when()
+                .get("https://jsonplaceholder.typicode.com/users/1")
+                .then()
+                .statusCode(200)
+                .body(matchesJsonSchemaInClasspath("user_schema.json"));
     }
 }
