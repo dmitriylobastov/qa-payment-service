@@ -1,16 +1,9 @@
 package ru.stepup.payments;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.openqa.selenium.chrome.ChromeOptions;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import ru.stepup.payments.pages.CartPage;
-import ru.stepup.payments.pages.CheckoutPage;
-import ru.stepup.payments.pages.InventoryPage;
-import ru.stepup.payments.pages.LoginPage;
+import ru.stepup.payments.pages.*;
 
 import static ru.stepup.payments.data.TestData.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,33 +12,35 @@ public class FirstSeleniumTest {
 
     private WebDriver driver;
 
+    @BeforeAll
+    static void setUpAll() {
+        WebDriverSingleton.getDriver("chrome");
+    }
+
     @BeforeEach
     void setUp() {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless");
-        options.addArguments("--no-sandbox");
-        options.addArguments("--disable-dev-shm-usage");
-
-        driver = new ChromeDriver(options);
+        driver = WebDriverSingleton.getDriver("chrome");
+        driver.get("https://www.saucedemo.com/");
     }
 
     @AfterEach
     void tearDown() {
         driver.manage().deleteAllCookies();
-        driver.get("https://www.saucedemo.com/");
         ((JavascriptExecutor) driver).executeScript("window.localStorage.clear();");
-        driver.quit();
+    }
+
+    @AfterAll
+    static void tearDownAll() {
+        WebDriverSingleton.quitDriver();
     }
 
     @Test
     void shouldOpenSauceDemo() {
-        driver.get("https://www.saucedemo.com/");
         assertThat(driver.getTitle()).contains("Swag Labs");
     }
 
     @Test
     void shouldLoginSuccessfully() {
-        driver.get("https://www.saucedemo.com/");
         new LoginPage(driver).login(STANDARD_USER, SECRET_SAUCE);
         InventoryPage inventoryPage = new InventoryPage(driver);
         inventoryPage.waitForUrlContains("inventory");
@@ -54,7 +49,6 @@ public class FirstSeleniumTest {
 
     @Test
     void shouldShowProductsAfterLogin() {
-        driver.get("https://www.saucedemo.com");
         new LoginPage(driver).login(STANDARD_USER, SECRET_SAUCE);
         InventoryPage inventoryPage = new InventoryPage(driver);
         inventoryPage.waitForUrlContains("inventory");
@@ -63,7 +57,6 @@ public class FirstSeleniumTest {
 
     @Test
     void shouldAddProductToCart() {
-        driver.get("https://www.saucedemo.com");
         new LoginPage(driver).login(STANDARD_USER, SECRET_SAUCE);
         InventoryPage inventoryPage = new InventoryPage(driver);
         inventoryPage.waitForUrlContains("inventory");
@@ -76,7 +69,6 @@ public class FirstSeleniumTest {
 
     @Test
     void shouldCheckout() {
-        driver.get("https://www.saucedemo.com");
         new LoginPage(driver).login(STANDARD_USER, SECRET_SAUCE);
         InventoryPage inventoryPage = new InventoryPage(driver);
         inventoryPage.waitForUrlContains("inventory");
